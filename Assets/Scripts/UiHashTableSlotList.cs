@@ -12,7 +12,7 @@ public class UiHashTableSlotList : MonoBehaviour
         OpenAddressing
     }
 
-    public enum Probings
+    public enum ProbingStrategy
     {
         Linear,
         Quadratic,
@@ -27,7 +27,7 @@ public class UiHashTableSlotList : MonoBehaviour
     private List<UiHashTableSlot> uiSlotList = new List<UiHashTableSlot>();
 
     private HashTableType type = HashTableType.Simple;
-    private Probings probe = Probings.Linear;
+    private ProbingStrategy probe = ProbingStrategy.Linear;
 
     public HashTableType Type
     {
@@ -43,7 +43,7 @@ public class UiHashTableSlotList : MonoBehaviour
         }
     }
 
-    public Probings Probing
+    public ProbingStrategy Probing
     {
         get => probe;
 

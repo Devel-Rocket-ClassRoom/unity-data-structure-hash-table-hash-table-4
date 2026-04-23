@@ -27,7 +27,7 @@ public class UiHashTableInventory : MonoBehaviour
 
     public void OnChangeProbe(int index)
     {
-        uiHashTableSlotList.Probing = (UiHashTableSlotList.Probings)index;
+        uiHashTableSlotList.Probing = (UiHashTableSlotList.ProbingStrategy)index;
     }
 
     public void OnAdd()
