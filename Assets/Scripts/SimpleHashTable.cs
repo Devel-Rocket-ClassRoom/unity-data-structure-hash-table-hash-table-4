@@ -8,9 +8,9 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
-    public SImpleHashTable(int capacity)
+    public SImpleHashTable()
     {
-        root = new HashTable<TKey, TValue>[capacity];
+        root = null;
     }
 
     public TValue this[TKey key]
@@ -43,11 +43,28 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
     public void Add(TKey key, TValue value)
     {
         int index = GetHashIndex(key);
+        if (root[index] == null)
+        {
+            root[index] = new HashTable<TKey, TValue>(key, value);
+            size++;
+        }
+        else 
+        {
+            HashTable<TKey, TValue> current = root[index];
+            while (current != null)
+            {
+                if (current.Key.CompareTo(key) == 0) throw new ArgumentException("중복 키!");
+                if (current.Next == null) break;
+                current = current.Next;
+            }
+            current.Next = new HashTable<TKey, TValue>(key, value);
+            size++;
+        }
     }
     private int GetHashIndex(TKey key)
     {
 
-        return Mathf.Abs(key.GetHashCode()) % root.Length;
+        return Mathf.Abs(key.GetHashCode());
     }
     public void Add(KeyValuePair<TKey, TValue> item)
     {
@@ -67,7 +84,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public bool ContainsKey(TKey key)
     {
-        throw new System.NotImplementedException();
+        return TryGetValue(key, out _);
     }
 
     public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
@@ -82,7 +99,34 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public bool Remove(TKey key)
     {
-        throw new System.NotImplementedException();
+        int index = GetHashIndex(key);
+        HashTable<TKey, TValue> current = root[index];
+        HashTable<TKey, TValue> prev = null; 
+       
+        while (current != null)
+        {
+         
+            if (current.Key.CompareTo(key) == 0)
+            {
+            
+                if (prev == null)
+                {
+                    root[index] = current.Next; 
+                }
+      
+                else
+                {
+                    prev.Next = current.Next; 
+                }
+
+                size--; 
+                return true; 
+            }
+            prev = current;
+            current = current.Next;
+        }
+
+        return false;
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> item)
@@ -92,7 +136,23 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        throw new System.NotImplementedException();
+        int index = GetHashIndex(key);
+        return TryGetValue(root[index], key,out value);
+    }
+    protected bool TryGetValue(HashTable<TKey, TValue> node, TKey key, out TValue value)
+    {
+        HashTable<TKey, TValue> current = node;
+        while (current != null)
+        {
+            if (key.CompareTo(current.Key) == 0)
+            {
+                value = current.Value;
+                return true;
+            }
+            current = current.Next;
+        }
+        value = default;
+        return false;
     }
 
     IEnumerator IEnumerable.GetEnumerator()
