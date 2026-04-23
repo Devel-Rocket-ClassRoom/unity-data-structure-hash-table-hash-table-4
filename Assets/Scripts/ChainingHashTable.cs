@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
@@ -124,7 +123,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         for(int i = 0; i < buckets.Length;i++)
         {
-            buckets[i] = null;
+            buckets[i] = new LinkedList<KeyValuePair<TKey, TValue>>();
         }
         count = 0;
     }
