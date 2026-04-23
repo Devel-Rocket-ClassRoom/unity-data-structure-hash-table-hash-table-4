@@ -49,9 +49,38 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     }
 
 
-    public ICollection<TKey> Keys => throw new NotImplementedException();
+    public ICollection<TKey> Keys
+    {
+        get
+        {
+            List<TKey> keys = new List<TKey>();
+            foreach (var bucket in buckets)
+            {
+                foreach (var kvp in bucket)
+                {
+                    keys.Add(kvp.Key);
+                }
+            }
+            return keys;
+        }
+    }
 
-    public ICollection<TValue> Values => throw new NotImplementedException();
+
+    public ICollection<TValue> Values
+    {
+        get
+        {
+            List<TValue> values = new List<TValue>();
+            foreach (var bucket in buckets)
+            {
+                foreach (var kvp in bucket)
+                {
+                    values.Add(kvp.Value);
+                }
+            }
+            return values;
+        }
+    }
 
     public int Count => count;
 
