@@ -38,7 +38,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         get
         {
             if(TryGetValue(key, out var value)) return value;
-            throw new KeyNotFoundException("Key not found");
+            throw new KeyNotFoundException("키 중복");
         }
         set
         {
@@ -59,12 +59,28 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public void Add(TKey key, TValue value)
     {
-        throw new System.NotImplementedException();
+        if(key == null ) throw new ArgumentNullException(nameof(key));
+        if((double)count / bucketsize > LoadFactor)
+        {
+            Resize();
+        }
+        int index = GetHash(key);
+        var bucket = GetBucket(index);
+        var node = FindNode(index, key);
+        if (node != null)
+        {
+            node.Value = new KeyValuePair<TKey, TValue>(key, value);
+        }
+        else
+        {
+            bucket.AddLast(new KeyValuePair<TKey, TValue>(key, value));
+            count++;
+        }
     }
 
     public void Add(KeyValuePair<TKey, TValue> item)
     {
-        throw new System.NotImplementedException();
+        Add(item.Key, item.Value);
     }
 
     public void Clear()
