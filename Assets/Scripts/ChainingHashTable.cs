@@ -44,7 +44,15 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         {
             if(key == null) throw new ArgumentNullException(nameof(key));
             int index = GetHash(key);
-            var bucket = FindNode(index, key);
+            var node = FindNode(index, key);
+
+            if(node != null)
+            {
+               buckets[index].Remove(node);
+               buckets[index].AddLast(new KeyValuePair<TKey, TValue>(key, value));
+               return;
+            }
+            Add(key, value);
         }
     }
 
