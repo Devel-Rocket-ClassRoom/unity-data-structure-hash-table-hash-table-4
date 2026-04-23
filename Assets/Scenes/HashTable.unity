@@ -333,6 +333,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2349554570631523365, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
+      propertyPath: m_text
+      value: REMOVE
+      objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
       value: Button (1)
@@ -355,6 +359,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 439823425}
     m_Modifications:
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273034616885013880, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273034616885013880, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6826111964688008756, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
       propertyPath: m_text
       value: Simple
@@ -1237,6 +1261,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2349554570631523365, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
+      propertyPath: m_text
+      value: CLEAR
+      objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
       value: Button (2)
@@ -1294,6 +1322,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 439823425}
     m_Modifications:
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766434708311874638, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273034616885013880, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273034616885013880, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8271675676121337087, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1729,14 +1777,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 3a6bfaa6db5691f4cb8dd46bd37bf7b9, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2122,6 +2170,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2349554570631523365, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
+      propertyPath: m_text
+      value: ADD
+      objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
       value: Button
@@ -2275,7 +2327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7980478963205022621, guid: da4f2fa31af431e46853018617f75cf5, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 80
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 7980478963205022621, guid: da4f2fa31af431e46853018617f75cf5, type: 3}
       propertyPath: m_LocalPosition.x
