@@ -8,4 +8,9 @@ public class UiHashTableSlot : MonoBehaviour
 
     public TextMeshProUGUI hashTableText;
     public Button slotButton;
+
+    public void SetData(string key, string value)
+    {
+        hashTableText.text = $"Key: {key}, Value: {value}";
+    }
 }

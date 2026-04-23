@@ -10,8 +10,6 @@ public class UiHashTableInventory : MonoBehaviour
     public TMP_InputField valueInput;
     public TMP_InputField log;
 
-    public UiHashTableSlot uiHashTableSlot;
-
     public UiHashTableSlotList uiHashTableSlotList;
 
     private void OnEnable()
@@ -32,8 +30,16 @@ public class UiHashTableInventory : MonoBehaviour
 
     public void OnAdd()
     {
+        string key = keyInput.text;
+        string value = valueInput.text;
+        if (string.IsNullOrEmpty(key))
+        {
+            return;
+        }
+
+        int index = Mathf.Abs(key.GetHashCode()) % uiHashTableSlotList.uiSlotList.Count;
+        uiHashTableSlotList.SetSlotData(index, key, value);
         Debug.Log("Add");
-        uiHashTableSlot.hashTableText.text = keyInput.text;
     }
 
     public void OnRemove()

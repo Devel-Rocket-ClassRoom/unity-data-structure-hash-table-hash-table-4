@@ -24,7 +24,7 @@ public class UiHashTableSlotList : MonoBehaviour
     public ScrollRect scrollRect;
     public UiHashTableSlot prefab;
 
-    private List<UiHashTableSlot> uiSlotList = new List<UiHashTableSlot>();
+    public List<UiHashTableSlot> uiSlotList = new List<UiHashTableSlot>();
 
     private HashTableType type = HashTableType.Simple;
     private ProbingStrategy probe = ProbingStrategy.Linear;
@@ -54,6 +54,19 @@ public class UiHashTableSlotList : MonoBehaviour
                 probe = value;
                 UpdateSlots();
             }
+        }
+    }
+
+    private void Awake()
+    {
+        uiSlotList.Capacity = 10;
+    }
+
+    public void SetSlotData(int index, string key, string value)
+    {
+        if (index >= 0 && index < uiSlotList.Count)
+        {
+            uiSlotList[index].SetData(key, value);
         }
     }
 
