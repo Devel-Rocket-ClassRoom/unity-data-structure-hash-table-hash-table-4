@@ -8,9 +8,10 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
-    public SImpleHashTable()
+    public SImpleHashTable(int capacity)
     {
-        root = null;
+        root = new HashTable<TKey, TValue>[capacity];
+        size = 0;
     }
 
     public TValue this[TKey key]
@@ -36,7 +37,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public ICollection<TValue> Values => throw new System.NotImplementedException();
 
-    public int Count => throw new System.NotImplementedException();
+    public int Count => size;
 
     public bool IsReadOnly => throw new System.NotImplementedException();
 
@@ -53,7 +54,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
             HashTable<TKey, TValue> current = root[index];
             while (current != null)
             {
-                if (current.Key.CompareTo(key) == 0) throw new ArgumentException("중복 키!");
+                if (current.Key.CompareTo(key) == 0) throw new ArgumentException();
                 if (current.Next == null) break;
                 current = current.Next;
             }
@@ -61,14 +62,23 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
             size++;
         }
     }
-    private int GetHashIndex(TKey key)
+    public int GetHashIndex(TKey key)
     {
+        if(key == null) throw new ArgumentNullException(nameof(key));
+        int hash = key.GetHashCode();
+        return (hash & 0x7fffffff) % size;
+    }
+    public int GetSecondaryHash(TKey key)
+    {
+        if (key == null)
+            throw new ArgumentNullException(nameof(key));
 
-        return Mathf.Abs(key.GetHashCode());
+        int hash = key.GetHashCode();
+        return 1 + ((hash & 0x7fffffff) % (size - 1));
     }
     public void Add(KeyValuePair<TKey, TValue> item)
     {
-        throw new System.NotImplementedException();
+        Add(item.Key, item.Value);
     }
 
 
