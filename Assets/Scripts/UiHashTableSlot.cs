@@ -33,7 +33,7 @@ public class UiHashTableSlot : MonoBehaviour
 
     public void SetAddColor()
     {
-        slotButton.image.color = Color.limeGreen;
+        slotButton.image.color = Color.powderBlue;
         addColor = slotButton.image.color;
     }
 
