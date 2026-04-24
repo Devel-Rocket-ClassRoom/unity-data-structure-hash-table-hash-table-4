@@ -6,6 +6,7 @@ public class UiHashTableSlot : MonoBehaviour
 {
     public int slotIndex = -1;
 
+    public TextMeshProUGUI indexText;
     public TextMeshProUGUI hashTableText;
     public Button slotButton;
 
@@ -17,5 +18,10 @@ public class UiHashTableSlot : MonoBehaviour
     public void SetEmpty()
     {
         hashTableText.text = $"K: , V: ";
+    }
+
+    public void SetIndexText(int index)
+    {
+        indexText.text = $"I: {slotIndex}";
     }
 }
