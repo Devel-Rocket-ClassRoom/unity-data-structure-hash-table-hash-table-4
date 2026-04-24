@@ -4,12 +4,12 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
+public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
     protected int Capacity => root.Length;
-    public SImpleHashTable(int capacity = 16)
+    public SimpleHashTable(int capacity = 16)
     {
         root = new HashTable<TKey, TValue>[capacity];
         size = 0;

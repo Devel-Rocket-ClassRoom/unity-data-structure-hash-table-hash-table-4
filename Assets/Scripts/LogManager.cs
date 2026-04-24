@@ -11,8 +11,8 @@ public class LogManager : MonoBehaviour
     [SerializeField] private int capacity;
 
     [Header("Dropdown")]
-    [SerializeField] private TMP_Dropdown dropdown;
-    [SerializeField] private TMP_Dropdown dropdown2;
+    [SerializeField] private TMP_Dropdown hashTableTypes;
+    [SerializeField] private TMP_Dropdown probes;
 
     [Header("Button")]
     [SerializeField] private Button addButton;
@@ -24,34 +24,43 @@ public class LogManager : MonoBehaviour
     [SerializeField] private TMP_InputField keyInput;
     [SerializeField] private TMP_InputField valueInput;
 
+    private SimpleHashTable<string, int> simpleHashTable;
+    private ChainingHashTable<string, int> chainingHashTable;
+    private OpenAddressingHashTable<string, int> openAddressingHashTable;
+
     public void Start()
     {
-        dropdown.onValueChanged.AddListener(OnDropdownChanged);
-        dropdown2.onValueChanged.AddListener(OnDropdown2Changed);
+        hashTableTypes.onValueChanged.AddListener(OnHashTableTypeChanged);
+        probes.onValueChanged.AddListener(OnProbeChanged);
 
         addButton.onClick.AddListener(OnAddButtonClicked);
         removeButton.onClick.AddListener(OnRemoveButtonClicked);
         clearButton.onClick.AddListener(OnClearButtonClicked);
 
         capacity = slotList.uiSlotList.Count;
+
+        simpleHashTable = new SimpleHashTable<string, int>(capacity);
+        chainingHashTable = new ChainingHashTable<string, int>(capacity);
+        openAddressingHashTable = new OpenAddressingHashTable<string, int>(capacity);
     }
 
-    public void OnDropdownChanged(int index)
+    public void OnHashTableTypeChanged(int index)
     {
-        string selected = dropdown.options[index].text;
-        sendText($"드롭다운 변경: {selected}");
+        OnClearButtonClicked();
+        string selected = hashTableTypes.options[index].text;
+        sendText($"충돌 타입 변경: {selected}");
     }
 
-    public void OnDropdown2Changed(int index)
+    public void OnProbeChanged(int index)
     {
-        string selected = dropdown2.options[index].text;
-        sendText($"드롭다운 변경: {selected}");
+        string selected = probes.options[index].text;
+        sendText($"Probe 변경: {selected}");
     }
 
     public void OnAddButtonClicked()
     {
         string key = keyInput.text;
-        string value = valueInput.text;
+        int value = int.Parse(valueInput.text);
         if (string.IsNullOrEmpty(key))
         {
             return;
@@ -59,19 +68,22 @@ public class LogManager : MonoBehaviour
 
         int index = Mathf.Abs(key.GetHashCode()) % capacity;
 
-        switch (dropdown.value)
+        switch (hashTableTypes.value)
         {
             case 0:
+                simpleHashTable.Add(key, value);
                 slotList.SetSlotData(index, key, value);
                 sendText("Simple");
                 break;
 
             case 1:
-                sendText("Chaining");
+                chainingHashTable.Add(key, value);
                 slotList.SetSlotData(index, key, value);
+                sendText("Chaining");
                 break;
 
             case 2:
+                openAddressingHashTable.Add(key, value);
                 slotList.SetSlotData(index, key, value);
                 sendText("OpenAddressing");
                 break;
@@ -85,6 +97,7 @@ public class LogManager : MonoBehaviour
 
     public void OnClearButtonClicked()
     {
+        slotList.SetEmpty();
         sendText("Clear 버튼 클릭됨");
     }
 

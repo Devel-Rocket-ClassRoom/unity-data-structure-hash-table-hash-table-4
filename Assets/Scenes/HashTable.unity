@@ -358,7 +358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
-      value: Button (1)
+      value: Remove
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -492,7 +492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8382345343371716645, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
       propertyPath: m_Name
-      value: Dropdown
+      value: HashTableTypes
       objectReference: {fileID: 0}
     - target: {fileID: 9075962516483617317, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
       propertyPath: m_Options.m_Options.Array.data[0].m_Text
@@ -940,7 +940,7 @@ GameObject:
   - component: {fileID: 720399107}
   - component: {fileID: 720399106}
   m_Layer: 5
-  m_Name: Output_message
+  m_Name: Log Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1137,7 +1137,7 @@ GameObject:
   - component: {fileID: 809973268}
   - component: {fileID: 809973270}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Window
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1218,8 +1218,8 @@ MonoBehaviour:
   scrollRect: {fileID: 720399106}
   slotList: {fileID: 7856833}
   capacity: 0
-  dropdown: {fileID: 328147765}
-  dropdown2: {fileID: 1524706914}
+  hashTableTypes: {fileID: 328147765}
+  probes: {fileID: 1524706914}
   addButton: {fileID: 1110482094209152605}
   removeButton: {fileID: 1411873871}
   clearButton: {fileID: 1869215071}
@@ -1368,7 +1368,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4759737652467840888, guid: 2107cc74206fa184190efa8a3d075acd, type: 3}
       propertyPath: m_Name
-      value: InputField (TMP) (1)
+      value: Value
       objectReference: {fileID: 0}
     - target: {fileID: 5699838563664299951, guid: 2107cc74206fa184190efa8a3d075acd, type: 3}
       propertyPath: m_Pivot.x
@@ -1565,7 +1565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
-      value: Button (2)
+      value: Clear
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1768,7 +1768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8382345343371716645, guid: 6f987c2ef5bfe434d9e38a9d50011344, type: 3}
       propertyPath: m_Name
-      value: Dropdown (1)
+      value: Probes
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2361,7 +2361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8748429565861272082, guid: 688f6f36c7949fb419cc12e28311002e, type: 3}
       propertyPath: m_Name
-      value: Button
+      value: Add
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2394,7 +2394,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4759737652467840888, guid: 2107cc74206fa184190efa8a3d075acd, type: 3}
       propertyPath: m_Name
-      value: InputField (TMP)
+      value: Key
       objectReference: {fileID: 0}
     - target: {fileID: 5699838563664299951, guid: 2107cc74206fa184190efa8a3d075acd, type: 3}
       propertyPath: m_Pivot.x

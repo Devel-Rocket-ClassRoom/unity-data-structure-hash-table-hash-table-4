@@ -63,7 +63,7 @@ public class UiHashTableSlotList : MonoBehaviour
         UpdateSlots();        
     }
 
-    public void SetSlotData(int index, string key, string value)
+    public void SetSlotData(int index, string key, int value)
     {
         if (index >= 0 && index < uiSlotList.Count)
         {
@@ -86,7 +86,7 @@ public class UiHashTableSlotList : MonoBehaviour
         {
             UiHashTableSlot newSlot = Instantiate(prefab, scrollRect.content);
             newSlot.slotIndex = i;
-            newSlot.SetData("", "");
+            newSlot.SetEmpty();
             uiSlotList.Add(newSlot);
         }
     }
