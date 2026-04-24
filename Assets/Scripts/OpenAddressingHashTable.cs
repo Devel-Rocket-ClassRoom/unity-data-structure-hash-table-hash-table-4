@@ -133,15 +133,23 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     public bool Remove(TKey key)
     {
         int index = GetHash(key);
-        if (hash[index] != null && key.CompareTo(hash[index].Key) == 0)
+        int nextindex = GetSecondaryHash(key);
+        int temp = index;
+        while (hash[index]!=null)
         {
-            hash[index].Key = default;
-            hash[index].Value = default;
-            hash[index].IsOccupied = false;
-            hash[index].IsDeleted = true;
-            size--;
+            if (hash[index].IsOccupied && key.CompareTo(hash[index].Key)==0)
+            {
+                hash[index].Key = default;
+                hash[index].Value = default;
+                hash[index].IsOccupied = false;
+                hash[index].IsDeleted = true;
+                size--;
+                return true;
+            }
+            index = (index + nextindex) % hash.Length;
+            if (index == temp) break;
         }
-        return true;
+        return false;
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> item)
