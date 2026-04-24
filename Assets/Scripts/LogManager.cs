@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -72,37 +73,45 @@ public class LogManager : MonoBehaviour
             return;
         }
 
-        int simpleIndex = Mathf.Abs(key.GetHashCode()) % simpleCapacity;
-        int chainingIndex = Mathf.Abs(key.GetHashCode()) % chainingCapacity;
-        int openAddressingIndex = Mathf.Abs(key.GetHashCode()) % openAddressingCapacity;
+        int simpleIndex = simpleHashTable.GetHash(key) % simpleCapacity;
+        int chainingIndex = chainingHashTable.GetHash(key) % chainingCapacity;
+        int openAddressingIndex = openAddressingHashTable.GetHash(key) % openAddressingCapacity;
 
         switch (hashTableTypes.value)
         {
             case 0:
-                slotList.uiSlotList.Capacity = simpleCapacity;
-                simpleHashTable.Add(key, value);
-                keys.Add(key);
-                slotList.SetSlotData(simpleIndex, key, value);
-                slotList.uiSlotList[simpleIndex].keys.Add(key);
-                sendText("Simple");
+                try
+                {
+                    slotList.SetCapacity(simpleCapacity);
+                    simpleHashTable.Add(key, value);
+                    keys.Add(key);
+                    slotList.SetSlotData(simpleIndex, key, value);
+                    slotList.uiSlotList[simpleIndex].keys.Add(key);
+                    sendText($"ADD: {key} -> {value}");
+                }
+                catch
+                {
+                    new ArgumentException();
+                    sendText("ADD 실패: 키 충돌");
+                }
                 break;
 
             case 1:
-                slotList.uiSlotList.Capacity = chainingCapacity;
+                slotList.SetCapacity(chainingCapacity);
                 chainingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(chainingIndex, key, value);
                 slotList.uiSlotList[chainingIndex].keys.Add(key);
-                sendText("Chaining");
+                sendText($"ADD: {key} -> {value}");
                 break;
 
             case 2:
-                slotList.uiSlotList.Capacity = openAddressingCapacity;
+                slotList.SetCapacity(openAddressingCapacity);
                 openAddressingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(openAddressingIndex, key, value);
                 slotList.uiSlotList[openAddressingIndex].keys.Add(key);
-                sendText("OpenAddressing");
+                sendText($"ADD: {key} -> {value}");
                 break;
         }
     }
@@ -119,22 +128,19 @@ public class LogManager : MonoBehaviour
         {
             case 0:
                 simpleHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove Simple");
                 break;
 
             case 1:
                 chainingHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove Chaining");
                 break;
 
             case 2:
                 openAddressingHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove OpenAddressing");
                 break;
         }
+
+        keys.Remove(key);
+        SetEmpty(key);
     }
 
     public void OnRemoveButtonClicked(string key)
@@ -148,31 +154,28 @@ public class LogManager : MonoBehaviour
         {
             case 0:
                 simpleHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove Simple");
                 break;
 
             case 1:
                 chainingHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove Chaining");
                 break;
 
             case 2:
                 openAddressingHashTable.Remove(key);
-                SetEmpty(key);
-                sendText("Remove OpenAddressing");
                 break;
         }
+
+        SetEmpty(key);
     }
 
     public void OnClearButtonClicked()
     {
+        simpleHashTable.Clear();
+        chainingHashTable.Clear();
+        openAddressingHashTable.Clear();
+
+        keys.Clear();
         slotList.SetEmpty();
-        foreach (var key in keys)
-        {
-            OnRemoveButtonClicked(key);
-        }
         sendText("CLEAR: 모든 항목 삭제됨");
     }
 
@@ -186,5 +189,23 @@ public class LogManager : MonoBehaviour
 
     public void SetEmpty(string key)
     {
+        foreach (var slot in slotList.uiSlotList)
+        {
+            if (slot.keys.Contains(key))
+            {
+                slot.keys.Remove(key);
+
+                if (slot.keys.Count == 0)
+                {
+                    slot.SetEmpty();
+                }
+                else
+                {
+                    slot.hashTableText.text = string.Join(", ", slot.keys);
+                }
+
+                break;
+            }
+        }
     }
 }

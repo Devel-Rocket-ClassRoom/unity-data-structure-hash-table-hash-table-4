@@ -9,7 +9,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     private int size;
     private int count;
 
-    private const int DefaultCapacity = 16;
+    private const int DefaultCapacity = 10;
     private const double LoadFactor = 0.75;
     public int Capacity => size;
 

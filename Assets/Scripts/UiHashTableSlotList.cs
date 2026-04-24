@@ -68,6 +68,7 @@ public class UiHashTableSlotList : MonoBehaviour
         if (index >= 0 && index < uiSlotList.Count)
         {
             uiSlotList[index].SetData(key, value);
+            uiSlotList[index].SetAddColor();
         }
     }
 
@@ -97,6 +98,14 @@ public class UiHashTableSlotList : MonoBehaviour
         foreach (var slot in uiSlotList)
         {
             slot.SetEmpty();
+        }
+    }
+    public void SetCapacity(int capacity)
+    {
+        if (uiSlotList.Count != capacity)
+        {
+            uiSlotList.Capacity = capacity;
+            UpdateSlots();
         }
     }
 }

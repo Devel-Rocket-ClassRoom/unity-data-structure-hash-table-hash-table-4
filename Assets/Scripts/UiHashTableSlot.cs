@@ -12,6 +12,9 @@ public class UiHashTableSlot : MonoBehaviour
     public TextMeshProUGUI hashTableText;
     public Button slotButton;
 
+    public Color normalColor;
+    public Color addColor;
+
     public void SetData(string key, int value)
     {
         hashTableText.text = $"K: {key}, V: {value}";
@@ -20,10 +23,23 @@ public class UiHashTableSlot : MonoBehaviour
     public void SetEmpty()
     {
         hashTableText.text = $"K: , V: ";
+        SetNormalColor();
     }
 
     public void SetIndexText(int index)
     {
         indexText.text = $"I: {slotIndex}";
+    }
+
+    public void SetAddColor()
+    {
+        slotButton.image.color = Color.limeGreen;
+        addColor = slotButton.image.color;
+    }
+
+    public void SetNormalColor()
+    {
+        slotButton.image.color = Color.white;
+        normalColor = slotButton.image.color;
     }
 }
