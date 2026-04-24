@@ -72,14 +72,14 @@ public class LogManager : MonoBehaviour
             return;
         }
 
-        int simpleIndex = Mathf.Abs(key.GetHashCode()) % simpleCapacity;
-        int chainingIndex = Mathf.Abs(key.GetHashCode()) % chainingCapacity;
-        int openAddressingIndex = Mathf.Abs(key.GetHashCode()) % openAddressingCapacity;
+        int simpleIndex = simpleHashTable.GetHash(key) % simpleCapacity;
+        int chainingIndex = chainingHashTable.GetHash(key) % chainingCapacity;
+        int openAddressingIndex = openAddressingHashTable.GetHash(key) % openAddressingCapacity;
 
         switch (hashTableTypes.value)
         {
             case 0:
-                slotList.uiSlotList.Capacity = simpleCapacity;
+                slotList.SetCapacity(simpleCapacity);
                 simpleHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(simpleIndex, key, value);
@@ -88,7 +88,7 @@ public class LogManager : MonoBehaviour
                 break;
 
             case 1:
-                slotList.uiSlotList.Capacity = chainingCapacity;
+                slotList.SetCapacity(chainingCapacity);
                 chainingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(chainingIndex, key, value);
@@ -97,7 +97,7 @@ public class LogManager : MonoBehaviour
                 break;
 
             case 2:
-                slotList.uiSlotList.Capacity = openAddressingCapacity;
+                slotList.SetCapacity(openAddressingCapacity);
                 openAddressingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(openAddressingIndex, key, value);
@@ -120,21 +120,20 @@ public class LogManager : MonoBehaviour
             case 0:
                 simpleHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove Simple");
                 break;
 
             case 1:
                 chainingHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove Chaining");
                 break;
 
             case 2:
                 openAddressingHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove OpenAddressing");
                 break;
         }
+
+        slotList.UpdateSlots();
     }
 
     public void OnRemoveButtonClicked(string key)
@@ -149,21 +148,20 @@ public class LogManager : MonoBehaviour
             case 0:
                 simpleHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove Simple");
                 break;
 
             case 1:
                 chainingHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove Chaining");
                 break;
 
             case 2:
                 openAddressingHashTable.Remove(key);
                 SetEmpty(key);
-                sendText("Remove OpenAddressing");
                 break;
         }
+
+        slotList.UpdateSlots();
     }
 
     public void OnClearButtonClicked()
@@ -186,5 +184,23 @@ public class LogManager : MonoBehaviour
 
     public void SetEmpty(string key)
     {
+        foreach (var slot in slotList.uiSlotList)
+        {
+            if (slot.keys.Contains(key))
+            {
+                slot.keys.Remove(key);
+
+                if (slot.keys.Count == 0)
+                {
+                    slot.SetEmpty();
+                }
+                else
+                {
+                    slot.hashTableText.text = string.Join(", ", slot.keys);
+                }
+
+                break;
+            }
+        }
     }
 }
