@@ -12,9 +12,10 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     private const int DefaultCapacity = 16;
     private const double LoadFactor = 0.75;
+    public int Capacity => bucketsize;  
 
-    
-    
+
+
 
     public ChainingHashTable(int capacity = DefaultCapacity)
     {
