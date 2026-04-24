@@ -7,30 +7,33 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 {
     private LinkedList<KeyValuePair<TKey, TValue>>[] buckets;
 
-    private int bucketsize;
+    private int size;
     private int count;
 
     private const int DefaultCapacity = 16;
     private const double LoadFactor = 0.75;
-    public int Capacity => bucketsize;  
+    public int Capacity => size;  
 
+    public int Count => count;
+
+    public bool IsReadOnly => false;
 
 
 
     public ChainingHashTable(int capacity = DefaultCapacity)
     {
-        bucketsize = capacity;
-        buckets = new LinkedList<KeyValuePair<TKey, TValue>>[bucketsize];
-        for (int i = 0; i < bucketsize; i++)
+        size = capacity;
+        buckets = new LinkedList<KeyValuePair<TKey, TValue>>[size];
+        for (int i = 0; i < size; i++)
         {
             buckets[i] = new LinkedList<KeyValuePair<TKey, TValue>>();
         }
         count = 0;
-    }
+    }//생성자
 
     public int GetHash(TKey key)
     {
-        return (key.GetHashCode() & 0x7FFFFFFF) % bucketsize;
+        return (key.GetHashCode() & 0x7FFFFFFF) % size;//양수로 변환 후 배열 크기로 나눈 나머지
     }
 
     public TValue this[TKey key]
@@ -38,7 +41,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         get
         {
             if(TryGetValue(key, out var value)) return value;
-            throw new KeyNotFoundException("키 중복");
+            throw new KeyNotFoundException("키 X");
         }
         set
         {
@@ -61,7 +64,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         get
         {
-            List<TKey> keys = new List<TKey>();
+            List<TKey> keys = new List<TKey>();//키들을 저장할 리스트
             foreach (var bucket in buckets)
             {
                 foreach (var kvp in bucket)
@@ -90,14 +93,11 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
     }
 
-    public int Count => count;
-
-    public bool IsReadOnly => false;
 
     public void Add(TKey key, TValue value)
     {
         if(key == null ) throw new ArgumentNullException(nameof(key));
-        if((double)count / bucketsize > LoadFactor)
+        if((double)count / size > LoadFactor)
         {
             Resize();
         }
@@ -110,8 +110,8 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
         else
         {
-            bucket.AddLast(new KeyValuePair<TKey, TValue>(key, value));
-            count++;
+            bucket.AddLast(new KeyValuePair<TKey, TValue>(key, value));//새로운 키-값 쌍을 버킷의 연결 리스트에 추가
+            count++;//전체 요소 수 증가
         }
     }
 
@@ -145,7 +145,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         if (array == null) throw new ArgumentNullException(nameof(array));
         if (arrayIndex < 0 || arrayIndex > array.Length) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-        if (array.Length - arrayIndex < count) throw new ArgumentException("The array is too small to copy the elements.");
+        if (array.Length - arrayIndex < count) throw new ArgumentException("배열의 크기가 충분하지 않습니다.");
 
 
         foreach (var kvp in this)
@@ -227,7 +227,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     private void Resize()
     {
-        int newSize = bucketsize * 2;
+        int newSize = size * 2;
         var newBuckets = new LinkedList<KeyValuePair<TKey, TValue>>[newSize];
         for (int i = 0; i < newSize; i++)
         {
@@ -242,6 +242,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
             }
         }
         buckets = newBuckets;
-        bucketsize = newSize;
+        size = newSize;
     }
 }
