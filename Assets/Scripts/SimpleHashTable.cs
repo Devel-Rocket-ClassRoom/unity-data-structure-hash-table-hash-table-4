@@ -46,14 +46,19 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
     public void Add(TKey key, TValue value)
     {
         int index = GetHash(key);
-        if ((float)(size+1)/root.Length>=0.75)
+        if ((float)(size + 1) / root.Length >= 0.75)
         {
             Resize();
         }
         if (root[index] != null && root[index].IsOccupied)
         {
-            throw new ArgumentException($"{key} : 해시 충돌");
+            if (key.CompareTo(root[index].Key)==0)
+            {
+                throw new ArgumentException("키충돌");
+            }
+            throw new ArgumentException("Hash충돌");
         }
+
         if (root[index] == null)
         {
             root[index] = new HashTable<TKey, TValue>(key, value);
