@@ -26,6 +26,20 @@ public class TestSimpleHash : MonoBehaviour
             Debug.Log(h.Value);
         }
         
+        hash.Remove("dd");
+        Debug.Log("dd");
+        foreach( var h in hash)
+        {
+            Debug.Log(h.Value);
+        }
+        hash.Clear();
+        Debug.Log("¤·¤·");
+        foreach( var h in hash)
+        {
+            Debug.Log(h.Value);
+            
+        }
+        
     }
 
 }

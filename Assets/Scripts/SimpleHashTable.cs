@@ -97,6 +97,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
+        if (root == null) yield break;
         foreach(var item in root)
         {
             if (item != null && item.IsOccupied)

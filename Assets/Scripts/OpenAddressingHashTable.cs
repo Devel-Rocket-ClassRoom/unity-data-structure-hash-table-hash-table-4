@@ -112,6 +112,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
+        if (hash == null) yield break;
         foreach (var item in hash)
         {
             if (item != null && item.IsOccupied)
@@ -124,9 +125,14 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     public bool Remove(TKey key)
     {
         int index = GetHash(key);
-        hash[index].IsOccupied = false;
-        hash[index].IsDeleted = true;
-        size--;
+        if (hash[index] != null && key.CompareTo(hash[index].Key) == 0)
+        {
+            hash[index].Key = default;
+            hash[index].Value = default;
+            hash[index].IsOccupied = false;
+            hash[index].IsDeleted = true;
+            size--;
+        }
         return true;
     }
 
