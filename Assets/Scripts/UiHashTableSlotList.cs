@@ -86,6 +86,7 @@ public class UiHashTableSlotList : MonoBehaviour
         {
             UiHashTableSlot newSlot = Instantiate(prefab, scrollRect.content);
             newSlot.slotIndex = i;
+            newSlot.SetIndexText(newSlot.slotIndex);
             newSlot.SetEmpty();
             uiSlotList.Add(newSlot);
         }
@@ -93,7 +94,9 @@ public class UiHashTableSlotList : MonoBehaviour
 
     public void SetEmpty()
     {
-        uiSlotList.Clear();
-        UpdateSlots();
+        foreach (var slot in uiSlotList)
+        {
+            slot.SetEmpty();
+        }
     }
 }

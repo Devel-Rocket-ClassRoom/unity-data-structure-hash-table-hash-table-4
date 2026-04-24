@@ -46,7 +46,6 @@ public class LogManager : MonoBehaviour
 
     public void OnHashTableTypeChanged(int index)
     {
-        OnClearButtonClicked();
         string selected = hashTableTypes.options[index].text;
         sendText($"충돌 타입 변경: {selected}");
     }
@@ -97,7 +96,11 @@ public class LogManager : MonoBehaviour
 
     public void OnClearButtonClicked()
     {
-        slotList.SetEmpty();
+        var lists = slotList.uiSlotList;
+        foreach (var slot in lists)
+        {
+            slot.SetEmpty();
+        }
         sendText("Clear 버튼 클릭됨");
     }
 
