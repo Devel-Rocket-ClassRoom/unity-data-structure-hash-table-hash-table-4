@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UiHashTableSlot : MonoBehaviour
 {
+    public List<string> keys = new List<string>();
     public int slotIndex = -1;
 
     public TextMeshProUGUI indexText;
