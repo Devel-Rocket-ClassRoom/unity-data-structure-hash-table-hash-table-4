@@ -7,15 +7,22 @@ public class LogManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI logText;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private UiHashTableSlotList slotList;
+    [SerializeField] private int capacity;
 
     [Header("Dropdown")]
     [SerializeField] private TMP_Dropdown dropdown;
     [SerializeField] private TMP_Dropdown dropdown2;
+
     [Header("Button")]
     [SerializeField] private Button addButton;
     [SerializeField] private Button removeButton;
     [SerializeField] private Button clearButton;
     [SerializeField] private Queue<string> logQueue = new Queue<string>();
+
+    [Header("InputField")]
+    [SerializeField] private TMP_InputField keyInput;
+    [SerializeField] private TMP_InputField valueInput;
 
     public void Start()
     {
@@ -25,6 +32,8 @@ public class LogManager : MonoBehaviour
         addButton.onClick.AddListener(OnAddButtonClicked);
         removeButton.onClick.AddListener(OnRemoveButtonClicked);
         clearButton.onClick.AddListener(OnClearButtonClicked);
+
+        capacity = slotList.uiSlotList.Count;
     }
 
     public void OnDropdownChanged(int index)
@@ -41,7 +50,32 @@ public class LogManager : MonoBehaviour
 
     public void OnAddButtonClicked()
     {
-        sendText($"Add 버튼 클릭됨");
+        string key = keyInput.text;
+        string value = valueInput.text;
+        if (string.IsNullOrEmpty(key))
+        {
+            return;
+        }
+
+        int index = Mathf.Abs(key.GetHashCode()) % capacity;
+
+        switch (dropdown.value)
+        {
+            case 0:
+                slotList.SetSlotData(index, key, value);
+                sendText("Simple");
+                break;
+
+            case 1:
+                sendText("Chaining");
+                slotList.SetSlotData(index, key, value);
+                break;
+
+            case 2:
+                slotList.SetSlotData(index, key, value);
+                sendText("OpenAddressing");
+                break;
+        }
     }
 
     public void OnRemoveButtonClicked()
@@ -51,7 +85,7 @@ public class LogManager : MonoBehaviour
 
     public void OnClearButtonClicked()
     {
-        sendText($"Clear 버튼 클릭됨");
+        sendText("Clear 버튼 클릭됨");
     }
 
     public void sendText(string message)

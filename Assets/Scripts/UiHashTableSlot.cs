@@ -11,6 +11,6 @@ public class UiHashTableSlot : MonoBehaviour
 
     public void SetData(string key, string value)
     {
-        hashTableText.text = $"Key: {key}, Value: {value}";
+        hashTableText.text = $"K: {key}, V: {value}";
     }
 }
