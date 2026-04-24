@@ -12,7 +12,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     private const int DefaultCapacity = 16;
     private const double LoadFactor = 0.75;
-    public int Capacity => size;  
+    public int Capacity => size;
 
     public int Count => count;
 
@@ -35,12 +35,16 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         return (key.GetHashCode() & 0x7FFFFFFF) % size;//양수로 변환 후 배열 크기로 나눈 나머지
     }
+    public IEnumerable<KeyValuePair<TKey, TValue>> GetBucketItems(int index)
+    {
+        return buckets[index];
+    }
 
     public TValue this[TKey key]
     {
         get
         {
-            if(TryGetValue(key, out var value)) return value;
+            if (TryGetValue(key, out var value)) return value;//키가 존재하면 값을 반환
             throw new KeyNotFoundException("키 X");
         }
         set
@@ -65,7 +69,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         get
         {
-            List<TKey> keys = new List<TKey>();//키들을 저장할 리스트
+            List<TKey> keys = new List<TKey>();//키들을 저장
             foreach (var bucket in buckets)
             {
                 foreach (var kvp in bucket)
@@ -82,7 +86,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     {
         get
         {
-            List<TValue> values = new List<TValue>();
+            List<TValue> values = new List<TValue>();//값들을 저장 
             foreach (var bucket in buckets)
             {
                 foreach (var kvp in bucket)
@@ -97,22 +101,23 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public void Add(TKey key, TValue value)
     {
-        if(key == null ) throw new ArgumentNullException(nameof(key));
-        if((double)count / size > LoadFactor)
+        if (key == null) throw new ArgumentNullException(nameof(key));
+        if ((double)count / size > LoadFactor)
         {
             Resize();
         }
         int index = GetHash(key);
-        var bucket = GetBucket(index);
+        //var bucket = GetBucket(index);
         var node = FindNode(index, key);
         if (node != null)
         {
-            node.Value = new KeyValuePair<TKey, TValue>(key, value);
+            node.Value = new KeyValuePair<TKey, TValue>(key, value);//키가 존재하면 값을 업데이트
         }
         else
         {
-            bucket.AddLast(new KeyValuePair<TKey, TValue>(key, value));//새로운 키-값 쌍을 버킷의 연결 리스트에 추가
-            count++;//전체 요소 수 증가
+            
+            buckets[index].AddLast(new KeyValuePair<TKey, TValue>(key, value));
+            count++;
         }
     }
 
@@ -123,16 +128,16 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public void Clear()
     {
-        for(int i = 0; i < buckets.Length;i++)
+        for (int i = 0; i < buckets.Length; i++)
         {
-            buckets[i] = new LinkedList<KeyValuePair<TKey, TValue>>();
+            buckets[i] = new LinkedList<KeyValuePair<TKey, TValue>>();//빈 리스트로 초기화.
         }
         count = 0;
     }
 
     public bool Contains(KeyValuePair<TKey, TValue> item)
     {
-        if(!TryGetValue(item.Key, out var value)) return false;
+        if (!TryGetValue(item.Key, out var value)) return false;
         return EqualityComparer<TValue>.Default.Equals(value, item.Value);
     }
 
@@ -168,7 +173,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public bool Remove(TKey key)
     {
-        if(key == null) throw new ArgumentNullException(nameof(key));
+        if (key == null) throw new ArgumentNullException(nameof(key));
         int index = GetHash(key);
         var node = FindNode(index, key);
         if (node == null) return false;
@@ -184,7 +189,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        if(key == null) throw new ArgumentNullException(nameof(key));
+        if (key == null) throw new ArgumentNullException(nameof(key));
         int index = GetHash(key);
         var node = FindNode(index, key);
         if (node != null)
@@ -201,15 +206,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         return GetEnumerator();
     }
 
-    private LinkedList<KeyValuePair<TKey, TValue>> GetBucket(int index)
-    {
-        if(buckets[index] == null)
-        {
-            buckets[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
-        }
-        return buckets[index];
-    }
-     
+  
 
     private LinkedListNode<KeyValuePair<TKey, TValue>> FindNode(int index, TKey key)
     {
@@ -246,3 +243,4 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         size = newSize;
     }
 }
+
