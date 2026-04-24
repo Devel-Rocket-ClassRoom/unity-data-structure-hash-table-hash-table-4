@@ -37,9 +37,6 @@ public class TestSimpleHash : MonoBehaviour
         foreach( var h in hash)
         {
             Debug.Log(h.Value);
-            
         }
-        
     }
-
 }

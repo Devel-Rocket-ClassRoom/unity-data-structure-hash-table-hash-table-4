@@ -22,7 +22,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
             }
             else
             {
-                throw new KeyNotFoundException("같은 키");
+                throw new KeyNotFoundException("키 없음");
             }
         }
         set
@@ -42,7 +42,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     public void Add(TKey key, TValue value)
     {
         
-        if ((float)(size + 1) / hash.Length >= 0.75)
+        if ((float)(size + 1) / hash.Length >= 0.6)
         {
             Resize();
         }
@@ -91,7 +91,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 
     public void Clear()
     {
-        hash = null;
+        hash = new HashTable<TKey, TValue>[hash.Length];
         size = 0;
     }
 
