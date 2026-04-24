@@ -50,9 +50,9 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
         }
         if (root[index] != null && root[index].IsOccupied)
         {
-            if (key.CompareTo(root[index].Key)==0)
+            if (key.CompareTo(root[index].Key) == 0)
             {
-                throw new ArgumentException("키충돌");
+                throw new ArgumentException("키 충돌");
             }
             throw new ArgumentOutOfRangeException("Hash충돌");
         }

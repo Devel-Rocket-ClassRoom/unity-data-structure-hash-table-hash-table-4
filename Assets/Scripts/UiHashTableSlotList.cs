@@ -60,7 +60,7 @@ public class UiHashTableSlotList : MonoBehaviour
     private void Awake()
     {
         uiSlotList.Capacity = 10;
-        UpdateSlots();        
+        UpdateSlots();
     }
 
     public void SetSlotData(int index, string key, int value)

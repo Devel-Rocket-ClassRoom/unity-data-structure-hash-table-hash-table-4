@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
 {
@@ -42,7 +41,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 
     public void Add(TKey key, TValue value)
     {
-        
+
         int index = GetHash(key);
         int nextindex = GetSecondaryHash(key);
         int firstdeletedindex = -1;
@@ -81,7 +80,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     {
         if (key == null) throw new ArgumentNullException(nameof(key));
         int hash = key.GetHashCode();
-        return (hash & 0x7fffffff) % this.hash.Length ;
+        return (hash & 0x7fffffff) % this.hash.Length;
     }
 
     public int GetSecondaryHash(TKey key)
@@ -136,9 +135,9 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         int index = GetHash(key);
         int nextindex = GetSecondaryHash(key);
         int temp = index;
-        while (hash[index]!=null)
+        while (hash[index] != null)
         {
-            if (hash[index].IsOccupied && key.CompareTo(hash[index].Key)==0)
+            if (hash[index].IsOccupied && key.CompareTo(hash[index].Key) == 0)
             {
                 hash[index].Key = default;
                 hash[index].Value = default;
@@ -175,17 +174,17 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         int index = GetHash(key);
         int nextindex = GetSecondaryHash(key);
         int hashindex = index;
-        while (hash[index]!=null)
+        while (hash[index] != null)
         {
             if (hash[index].IsOccupied && key.CompareTo(hash[index].Key) == 0)
             {
                 value = hash[index].Value;
                 return true;
             }
-            index = (index+nextindex) % hash.Length;
+            index = (index + nextindex) % hash.Length;
             if (index == hashindex) break;
         }
-      
+
         value = default;
         return false;
     }
