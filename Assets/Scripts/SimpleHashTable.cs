@@ -9,7 +9,7 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
-    protected int Capacity => root.Length;
+    public int Capacity => root.Length;
     public SimpleHashTable(int capacity = 16)
     {
         root = new HashTable<TKey, TValue>[capacity];
