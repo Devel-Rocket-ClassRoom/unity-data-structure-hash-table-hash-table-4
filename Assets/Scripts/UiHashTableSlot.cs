@@ -23,7 +23,7 @@ public class UiHashTableSlot : MonoBehaviour
     public void SetEmpty()
     {
         hashTableText.text = $"K: , V: ";
-        SetNomarColor();
+        SetNormalColor();
     }
 
     public void SetIndexText(int index)
@@ -37,7 +37,7 @@ public class UiHashTableSlot : MonoBehaviour
         addColor = slotButton.image.color;
     }
 
-    public void SetNomarColor()
+    public void SetNormalColor()
     {
         slotButton.image.color = Color.white;
         normalColor = slotButton.image.color;
