@@ -1,20 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
-public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
+public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
 {
-    protected HashTable<TKey, TValue>[] root;
+    protected HashTable<TKey, TValue>[] hash;
     protected int size;
-    protected int Capacity => root.Length;
-    public SImpleHashTable(int capacity = 16)
+    public OpenAddressingHashTable(int capacity = 16)
     {
-        root = new HashTable<TKey, TValue>[capacity];
+        hash = new HashTable<TKey, TValue>[capacity];
         size = 0;
     }
-
     public TValue this[TKey key]
     {
         get
@@ -25,7 +22,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
             }
             else
             {
-                throw new KeyNotFoundException($"{key}겹침");
+                throw new KeyNotFoundException("같은 키");
             }
         }
         set
@@ -38,45 +35,63 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public ICollection<TValue> Values => throw new System.NotImplementedException();
 
-    public int Count => size;
+    public int Count => hash.Length;
 
     public bool IsReadOnly => throw new System.NotImplementedException();
 
     public void Add(TKey key, TValue value)
     {
-        int index = GetHash(key);
-        if ((float)(size+1)/root.Length>=0.75)
+        
+        if ((float)(size + 1) / hash.Length >= 0.75)
         {
             Resize();
         }
-        if (root[index] != null && root[index].IsOccupied)
+        int index = GetHash(key);
+        int nextindex = GetSecondaryHash(key);
+        while (hash[index] != null && hash[index].IsOccupied)
         {
-            throw new ArgumentException($"{key} : 해시 충돌");
-        }
-        if (root[index] == null)
+            if (key.CompareTo(hash[index].Key)==0)
+            {
+                hash[index].Value = value;
+                return;
+            }
+            index = (index + nextindex) % hash.Length;
+        }         
+        
+        if (hash[index] == null)
         {
-            root[index] = new HashTable<TKey, TValue>(key, value);
+            hash[index] = new HashTable<TKey, TValue>(key, value);
         }
-        root[index].Key = key;
-        root[index].Value = value;
-        root[index].IsOccupied = true;
+        hash[index].Key = key;
+        hash[index].Value = value;
+        hash[index].IsOccupied = true;
+        hash[index].IsDeleted = false;
         size++;
     }
     public int GetHash(TKey key)
     {
-        if(key == null) throw new ArgumentNullException(nameof(key));
+        if (key == null) throw new ArgumentNullException(nameof(key));
         int hash = key.GetHashCode();
-        return (hash & 0x7fffffff) % root.Length;
+        return (hash & 0x7fffffff) % this.hash.Length ;
     }
+
+    public int GetSecondaryHash(TKey key)
+    {
+        if (key == null)
+            throw new ArgumentNullException(nameof(key));
+
+        int hash = key.GetHashCode();
+        return 1 + ((hash & 0x7fffffff) % (this.hash.Length - 1));
+    }
+
     public void Add(KeyValuePair<TKey, TValue> item)
     {
         Add(item.Key, item.Value);
     }
 
-
     public void Clear()
     {
-        root = null;
+        hash = null;
         size = 0;
     }
 
@@ -97,59 +112,52 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
-        foreach(var item in root)
+        foreach (var item in hash)
         {
             if (item != null && item.IsOccupied)
             {
                 yield return new KeyValuePair<TKey, TValue>(item.Key, item.Value);
             }
         }
-      
     }
 
     public bool Remove(TKey key)
     {
         int index = GetHash(key);
-        if (root[index] != null && key.CompareTo(root[index].Key)==0)
-        {
-            root[index].IsOccupied = false;
-            root[index].Key = default;
-            root[index].Value = default;
-            size--;
-        }
-        return false;
-    
+        hash[index].IsOccupied = false;
+        hash[index].IsDeleted = true;
+        size--;
+        return true;
+    }
+
+    public bool Remove(KeyValuePair<TKey, TValue> item)
+    {
+        throw new System.NotImplementedException();
     }
     public void Resize()
     {
-        var oldset = root;
-        root = new HashTable<TKey, TValue>[Capacity*2];
+        var oldset = hash;
+        hash = new HashTable<TKey, TValue>[oldset.Length * 2];
         size = 0;
-        foreach(var item in oldset)
+        foreach (var item in oldset)
         {
-            if(item !=null &&item.IsOccupied)
+            if (item != null && item.IsOccupied)
             {
                 Add(item.Key, item.Value);
             }
         }
     }
-    public bool Remove(KeyValuePair<TKey, TValue> item)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public bool TryGetValue(TKey key, out TValue value)
     {
         int index = GetHash(key);
-        if (root[index]!=null&& key.CompareTo(root[index].Key)==0)
+        if (hash[index] != null && key.CompareTo(hash[index].Key) == 0)
         {
-            value = root[index].Value;
+            value = hash[index].Value;
             return true;
         }
         value = default;
         return false;
     }
-
 
     IEnumerator IEnumerable.GetEnumerator()
     {

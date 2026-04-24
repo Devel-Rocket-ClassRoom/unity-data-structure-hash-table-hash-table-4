@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TestSimpleHash : MonoBehaviour
 {
-    private SImpleHashTable<string, int> hash = new SImpleHashTable<string, int>();
+    private OpenAddressingHashTable<string, int> hash = new OpenAddressingHashTable<string, int>();
     void Start()
     { 
         hash.Add("dd", 11);
@@ -13,12 +13,19 @@ public class TestSimpleHash : MonoBehaviour
         hash.Add("fd", 14);
         hash.Add("gd", 13);
         hash.Add("hd", 12);
+        hash.Add("hh", 12);
+        hash.Add("ha", 12);
+        hash.Add("he", 12);
+        hash.Add("hq", 12);
+        hash.Add("hu", 12);
+        hash.Add("ht", 12);
+        hash.Add("ho", 12);
         
         foreach(var h in hash)
         {
             Debug.Log(h.Value);
         }
-        hash.Add("dd", 20);
+        
     }
 
 }
