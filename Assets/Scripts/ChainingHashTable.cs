@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 {
@@ -17,8 +16,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     public int Count => count;
 
     public bool IsReadOnly => false;
-
-
 
     public ChainingHashTable(int capacity = DefaultCapacity)
     {
@@ -64,7 +61,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
     }
 
-
     public ICollection<TKey> Keys
     {
         get
@@ -80,7 +76,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
             return keys;
         }
     }
-
 
     public ICollection<TValue> Values
     {
@@ -98,7 +93,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
     }
 
-
     public void Add(TKey key, TValue value)
     {
         if (key == null) throw new ArgumentNullException(nameof(key));
@@ -115,7 +109,7 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
         else
         {
-            
+
             buckets[index].AddLast(new KeyValuePair<TKey, TValue>(key, value));
             count++;
         }
@@ -206,8 +200,6 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         return GetEnumerator();
     }
 
-  
-
     private LinkedListNode<KeyValuePair<TKey, TValue>> FindNode(int index, TKey key)
     {
         var bucket = buckets[index];
@@ -243,4 +235,3 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         size = newSize;
     }
 }
-

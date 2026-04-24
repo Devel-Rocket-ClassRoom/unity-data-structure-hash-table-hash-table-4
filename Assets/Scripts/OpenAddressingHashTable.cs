@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
 {
@@ -12,6 +11,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         hash = new HashTable<TKey, TValue>[capacity];
         size = 0;
     }
+
     public TValue this[TKey key]
     {
         get
@@ -41,7 +41,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 
     public void Add(TKey key, TValue value)
     {
-        
+
         if ((float)(size + 1) / hash.Length >= 0.6)
         {
             Resize();
@@ -50,14 +50,14 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         int nextindex = GetSecondaryHash(key);
         while (hash[index] != null && hash[index].IsOccupied)
         {
-            if (key.CompareTo(hash[index].Key)==0)
+            if (key.CompareTo(hash[index].Key) == 0)
             {
                 hash[index].Value = value;
                 return;
             }
             index = (index + nextindex) % hash.Length;
-        }         
-        
+        }
+
         if (hash[index] == null)
         {
             hash[index] = new HashTable<TKey, TValue>(key, value);
@@ -68,11 +68,12 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         hash[index].IsDeleted = false;
         size++;
     }
+
     public int GetHash(TKey key)
     {
         if (key == null) throw new ArgumentNullException(nameof(key));
         int hash = key.GetHashCode();
-        return (hash & 0x7fffffff) % this.hash.Length ;
+        return (hash & 0x7fffffff) % this.hash.Length;
     }
 
     public int GetSecondaryHash(TKey key)
@@ -140,6 +141,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     {
         throw new System.NotImplementedException();
     }
+
     public void Resize()
     {
         var oldset = hash;
@@ -153,6 +155,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
             }
         }
     }
+
     public bool TryGetValue(TKey key, out TValue value)
     {
         int index = GetHash(key);
