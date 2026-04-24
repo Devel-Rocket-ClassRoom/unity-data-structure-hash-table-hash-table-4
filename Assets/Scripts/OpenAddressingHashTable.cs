@@ -57,8 +57,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         {
             if (key.CompareTo(hash[index].Key) == 0)
             {
-                hash[index].Value = value;
-                return;
+                throw new ArgumentException("키 충돌");
             }
             if (hash[index].IsDeleted && firstdeletedindex == -1)
             {
