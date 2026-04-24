@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UiHashTableSlot : MonoBehaviour
 {
+    public List<string> keys = new List<string>();
     public int slotIndex = -1;
 
+    public TextMeshProUGUI indexText;
     public TextMeshProUGUI hashTableText;
     public Button slotButton;
 
@@ -17,5 +20,10 @@ public class UiHashTableSlot : MonoBehaviour
     public void SetEmpty()
     {
         hashTableText.text = $"K: , V: ";
+    }
+
+    public void SetIndexText(int index)
+    {
+        indexText.text = $"I: {slotIndex}";
     }
 }

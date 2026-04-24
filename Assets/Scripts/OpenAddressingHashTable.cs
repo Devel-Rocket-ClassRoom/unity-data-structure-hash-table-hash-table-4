@@ -7,7 +7,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 {
     protected HashTable<TKey, TValue>[] hash;
     protected int size;
-    public int capacity => hash.Length;
+    public int Capacity => hash.Length;
     public OpenAddressingHashTable(int capacity = 16)
     {
         hash = new HashTable<TKey, TValue>[capacity];
