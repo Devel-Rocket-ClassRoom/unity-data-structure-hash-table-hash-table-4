@@ -52,9 +52,9 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
         {
             if (key.CompareTo(root[index].Key) == 0)
             {
-                throw new ArgumentException("키 충돌");
+                throw new KeyNotFoundException("키 충돌");
             }
-            throw new ArgumentOutOfRangeException("Hash충돌");
+            throw new ArgumentException("Hash충돌");
         }
 
         if (root[index] == null)

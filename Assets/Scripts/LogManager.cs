@@ -56,7 +56,6 @@ public class LogManager : MonoBehaviour
     {
         string selected = hashTableTypes.options[index].text;
         probes.interactable = (index == 2);
-        OnClearButtonClicked();
         sendText($"충돌 타입 변경: {selected}");
     }
 
@@ -91,13 +90,13 @@ public class LogManager : MonoBehaviour
                     slotList.uiSlotList[simpleIndex].keys.Add(key);
                     sendText($"ADD: {key} -> {value}");
                 }
-                catch (ArgumentOutOfRangeException)
+                catch (ArgumentException)
                 {
                     sendText("ADD 실패: 해쉬 충돌");
                 }
                 catch
                 {
-                    new ArgumentException();
+                    new KeyNotFoundException();
                     sendText("ADD 실패: 키 충돌");
                 }
                 break;
