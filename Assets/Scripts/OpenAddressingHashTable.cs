@@ -45,6 +45,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         
         int index = GetHash(key);
         int nextindex = GetSecondaryHash(key);
+        int firstdeletedindex = -1;
         if ((float)(size + 1) / hash.Length >= 0.6)
         {
             Resize();
@@ -53,22 +54,26 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
         }
         while (hash[index] != null && hash[index].IsOccupied)
         {
-            if (key.CompareTo(hash[index].Key)==0)
+            if (key.CompareTo(hash[index].Key) == 0)
             {
                 hash[index].Value = value;
                 return;
             }
+            if (hash[index].IsDeleted && firstdeletedindex == -1)
+            {
+                firstdeletedindex = index;
+            }
             index = (index + nextindex) % hash.Length;
-        }         
-        
-        if (hash[index] == null)
-        {
-            hash[index] = new HashTable<TKey, TValue>(key, value);
         }
-        hash[index].Key = key;
-        hash[index].Value = value;
-        hash[index].IsOccupied = true;
-        hash[index].IsDeleted = false;
+        int deleteCheckindex = (firstdeletedindex != -1) ? firstdeletedindex : index;
+        if (hash[deleteCheckindex] == null)
+        {
+            hash[deleteCheckindex] = new HashTable<TKey, TValue>(key, value);
+        }
+        hash[deleteCheckindex].Key = key;
+        hash[deleteCheckindex].Value = value;
+        hash[deleteCheckindex].IsOccupied = true;
+        hash[deleteCheckindex].IsDeleted = false;
         size++;
     }
     public int GetHash(TKey key)
@@ -159,11 +164,19 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     public bool TryGetValue(TKey key, out TValue value)
     {
         int index = GetHash(key);
-        if (hash[index] != null && key.CompareTo(hash[index].Key) == 0)
+        int nextindex = GetSecondaryHash(key);
+        int hashindex = index;
+        while (hash[index]!=null)
         {
-            value = hash[index].Value;
-            return true;
+            if (hash[index] != null && key.CompareTo(hash[index].Key) == 0)
+            {
+                value = hash[index].Value;
+                return true;
+            }
+            index = (index+nextindex) % hash.Length;
+            if (index == hashindex) break;
         }
+      
         value = default;
         return false;
     }
