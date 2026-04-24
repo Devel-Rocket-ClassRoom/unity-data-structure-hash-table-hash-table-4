@@ -96,7 +96,14 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
-        throw new System.NotImplementedException();
+        foreach(var item in root)
+        {
+            if (item != null && item.IsOccupied)
+            {
+                yield return new KeyValuePair<TKey, TValue>(item.Key, item.Value);
+            }
+        }
+      
     }
 
     public bool Remove(TKey key)
