@@ -9,7 +9,7 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
-    protected int Capacity => root.Length;
+    public int Capacity => root.Length;
     public SimpleHashTable(int capacity = 16)
     {
         root = new HashTable<TKey, TValue>[capacity];
@@ -26,7 +26,7 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
             }
             else
             {
-                throw new KeyNotFoundException($"{key}겹침");
+                throw new KeyNotFoundException($"키 없음");
             }
         }
         set
@@ -49,6 +49,7 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
         if ((float)(size + 1) / root.Length >= 0.75)
         {
             Resize();
+            index = GetHash(key);
         }
         if (root[index] != null && root[index].IsOccupied)
         {

@@ -7,6 +7,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 {
     protected HashTable<TKey, TValue>[] hash;
     protected int size;
+    public int capacity => hash.Length;
     public OpenAddressingHashTable(int capacity = 16)
     {
         hash = new HashTable<TKey, TValue>[capacity];
@@ -35,19 +36,21 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
 
     public ICollection<TValue> Values => throw new System.NotImplementedException();
 
-    public int Count => hash.Length;
+    public int Count => size;
 
     public bool IsReadOnly => throw new System.NotImplementedException();
 
     public void Add(TKey key, TValue value)
     {
         
+        int index = GetHash(key);
+        int nextindex = GetSecondaryHash(key);
         if ((float)(size + 1) / hash.Length >= 0.6)
         {
             Resize();
+            index = GetHash(key);
+            nextindex = GetSecondaryHash(key);
         }
-        int index = GetHash(key);
-        int nextindex = GetSecondaryHash(key);
         while (hash[index] != null && hash[index].IsOccupied)
         {
             if (key.CompareTo(hash[index].Key)==0)
