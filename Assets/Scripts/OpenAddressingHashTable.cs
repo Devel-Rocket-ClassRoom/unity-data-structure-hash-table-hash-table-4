@@ -42,12 +42,14 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
     public void Add(TKey key, TValue value)
     {
         
+        int index = GetHash(key);
+        int nextindex = GetSecondaryHash(key);
         if ((float)(size + 1) / hash.Length >= 0.6)
         {
             Resize();
+            index = GetHash(key);
+            nextindex = GetSecondaryHash(key);
         }
-        int index = GetHash(key);
-        int nextindex = GetSecondaryHash(key);
         while (hash[index] != null && hash[index].IsOccupied)
         {
             if (key.CompareTo(hash[index].Key)==0)
