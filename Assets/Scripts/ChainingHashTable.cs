@@ -45,15 +45,16 @@ public class ChainingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
         }
         set
         {
-            if(key == null) throw new ArgumentNullException(nameof(key));
-            int index = GetHash(key);
-            var node = FindNode(index, key);
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            int index = GetHash(key);//키의 해시값을 계산하여 버킷 인덱스를 얻음
+            var node = FindNode(index, key);//버킷에서 키를 찾음
 
-            if(node != null)
+            if (node != null)//키가 존재하면
             {
-               buckets[index].Remove(node);
-               buckets[index].AddLast(new KeyValuePair<TKey, TValue>(key, value));
-               return;
+                //체이닝 방식에서는 키가 존재하면 기존 노드를 제거하고 새로운 키-값 쌍을 추가하는 방식
+                buckets[index].Remove(node);//키가 존재하면 기존 노드를 제거
+                buckets[index].AddLast(new KeyValuePair<TKey, TValue>(key, value));//새로운 키-값 쌍을 추가
+                return;
             }
             Add(key, value);
         }
