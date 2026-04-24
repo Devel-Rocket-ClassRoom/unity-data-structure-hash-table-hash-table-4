@@ -41,13 +41,13 @@ public class LogManager : MonoBehaviour
         removeButton.onClick.AddListener(OnRemoveButtonClicked);
         clearButton.onClick.AddListener(OnClearButtonClicked);
         
-        simpleHashTable = new SimpleHashTable<string, int>(simpleHashTable.Capacity);
-        chainingHashTable = new ChainingHashTable<string, int>(chainingHashTable.Capacity);
-        openAddressingHashTable = new OpenAddressingHashTable<string, int>(openAddressingHashTable.Count);
+        simpleHashTable = new SimpleHashTable<string, int>();
+        chainingHashTable = new ChainingHashTable<string, int>();
+        openAddressingHashTable = new OpenAddressingHashTable<string, int>();
 
         simpleCapacity = simpleHashTable.Capacity;
         chainingCapacity = chainingHashTable.Capacity;
-        openAddressingCapacity = openAddressingHashTable.Count;
+        openAddressingCapacity = openAddressingHashTable.Capacity;
     }
 
     public void OnHashTableTypeChanged(int index)
@@ -79,6 +79,7 @@ public class LogManager : MonoBehaviour
         switch (hashTableTypes.value)
         {
             case 0:
+                slotList.uiSlotList.Capacity = simpleCapacity;
                 simpleHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(simpleIndex, key, value);
@@ -87,6 +88,7 @@ public class LogManager : MonoBehaviour
                 break;
 
             case 1:
+                slotList.uiSlotList.Capacity = chainingCapacity;
                 chainingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(chainingIndex, key, value);
@@ -95,6 +97,7 @@ public class LogManager : MonoBehaviour
                 break;
 
             case 2:
+                slotList.uiSlotList.Capacity = openAddressingCapacity;
                 openAddressingHashTable.Add(key, value);
                 keys.Add(key);
                 slotList.SetSlotData(openAddressingIndex, key, value);
