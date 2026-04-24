@@ -8,7 +8,8 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 {
     protected HashTable<TKey, TValue>[] root;
     protected int size;
-    public SImpleHashTable(int capacity)
+    protected int Capacity => root.Length;
+    public SImpleHashTable(int capacity = 16)
     {
         root = new HashTable<TKey, TValue>[capacity];
         size = 0;
@@ -29,7 +30,7 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
         }
         set
         {
-
+            Add(key, value);
         }
     }
 
@@ -43,38 +44,29 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public void Add(TKey key, TValue value)
     {
-        int index = GetHashIndex(key);
+        int index = GetHash(key);
+        if ((float)(size+1)/root.Length>=0.75)
+        {
+            Resize();
+        }
+        if (root[index] != null && root[index].IsOccupied)
+        {
+            throw new ArgumentException($"{key} : 해시 충돌");
+        }
         if (root[index] == null)
         {
             root[index] = new HashTable<TKey, TValue>(key, value);
-            size++;
         }
-        else 
-        {
-            HashTable<TKey, TValue> current = root[index];
-            while (current != null)
-            {
-                if (current.Key.CompareTo(key) == 0) throw new ArgumentException();
-                if (current.Next == null) break;
-                current = current.Next;
-            }
-            current.Next = new HashTable<TKey, TValue>(key, value);
-            size++;
-        }
+        root[index].Key = key;
+        root[index].Value = value;
+        root[index].IsOccupied = true;
+        size++;
     }
-    public int GetHashIndex(TKey key)
+    public int GetHash(TKey key)
     {
         if(key == null) throw new ArgumentNullException(nameof(key));
         int hash = key.GetHashCode();
-        return (hash & 0x7fffffff) % size;
-    }
-    public int GetSecondaryHash(TKey key)
-    {
-        if (key == null)
-            throw new ArgumentNullException(nameof(key));
-
-        int hash = key.GetHashCode();
-        return 1 + ((hash & 0x7fffffff) % (size - 1));
+        return (hash & 0x7fffffff) % root.Length;
     }
     public void Add(KeyValuePair<TKey, TValue> item)
     {
@@ -109,36 +101,30 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public bool Remove(TKey key)
     {
-        int index = GetHashIndex(key);
-        HashTable<TKey, TValue> current = root[index];
-        HashTable<TKey, TValue> prev = null; 
-       
-        while (current != null)
+        int index = GetHash(key);
+        if (root[index] != null && key.CompareTo(root[index].Key)==0)
         {
-         
-            if (current.Key.CompareTo(key) == 0)
-            {
-            
-                if (prev == null)
-                {
-                    root[index] = current.Next; 
-                }
-      
-                else
-                {
-                    prev.Next = current.Next; 
-                }
-
-                size--; 
-                return true; 
-            }
-            prev = current;
-            current = current.Next;
+            root[index].IsOccupied = false;
+            root[index].Key = default;
+            root[index].Value = default;
+            size--;
         }
-
         return false;
+    
     }
-
+    public void Resize()
+    {
+        var oldset = root;
+        root = new HashTable<TKey, TValue>[Capacity*2];
+        size = 0;
+        foreach(var item in oldset)
+        {
+            if(item !=null &&item.IsOccupied)
+            {
+                Add(item.Key, item.Value);
+            }
+        }
+    }
     public bool Remove(KeyValuePair<TKey, TValue> item)
     {
         throw new System.NotImplementedException();
@@ -146,24 +132,16 @@ public class SImpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        int index = GetHashIndex(key);
-        return TryGetValue(root[index], key,out value);
-    }
-    protected bool TryGetValue(HashTable<TKey, TValue> node, TKey key, out TValue value)
-    {
-        HashTable<TKey, TValue> current = node;
-        while (current != null)
+        int index = GetHash(key);
+        if (root[index]!=null&& key.CompareTo(root[index].Key)==0)
         {
-            if (key.CompareTo(current.Key) == 0)
-            {
-                value = current.Value;
-                return true;
-            }
-            current = current.Next;
+            value = root[index].Value;
+            return true;
         }
         value = default;
         return false;
     }
+
 
     IEnumerator IEnumerable.GetEnumerator()
     {
