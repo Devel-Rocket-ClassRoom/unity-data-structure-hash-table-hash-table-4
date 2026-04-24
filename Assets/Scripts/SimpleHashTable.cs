@@ -1,8 +1,9 @@
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Collections;
-using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKey : IComparable<TKey>
 {
@@ -76,7 +77,7 @@ public class SimpleHashTable<TKey, TValue> : IDictionary<TKey, TValue> where TKe
 
     public void Clear()
     {
-        root = null;
+        root = new HashTable<TKey, TValue>[root.Length];
         size = 0;
     }
 
