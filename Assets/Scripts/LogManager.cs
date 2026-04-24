@@ -21,7 +21,6 @@ public class LogManager : MonoBehaviour
     [SerializeField] private Button addButton;
     [SerializeField] private Button removeButton;
     [SerializeField] private Button clearButton;
-    [SerializeField] private Queue<string> logQueue = new Queue<string>();
 
     [Header("InputField")]
     [SerializeField] private TMP_InputField keyInput;
@@ -41,7 +40,7 @@ public class LogManager : MonoBehaviour
         addButton.onClick.AddListener(OnAddButtonClicked);
         removeButton.onClick.AddListener(OnRemoveButtonClicked);
         clearButton.onClick.AddListener(OnClearButtonClicked);
-        
+
         simpleHashTable = new SimpleHashTable<string, int>();
         chainingHashTable = new ChainingHashTable<string, int>();
         openAddressingHashTable = new OpenAddressingHashTable<string, int>();
@@ -49,11 +48,14 @@ public class LogManager : MonoBehaviour
         simpleCapacity = simpleHashTable.Capacity;
         chainingCapacity = chainingHashTable.Capacity;
         openAddressingCapacity = openAddressingHashTable.Capacity;
+
+        probes.interactable = (probes.value == 2);
     }
 
     public void OnHashTableTypeChanged(int index)
     {
         string selected = hashTableTypes.options[index].text;
+        probes.interactable = (index == 2);
         OnClearButtonClicked();
         sendText($"충돌 타입 변경: {selected}");
     }
@@ -88,6 +90,10 @@ public class LogManager : MonoBehaviour
                     slotList.SetSlotData(simpleIndex, key, value);
                     slotList.uiSlotList[simpleIndex].keys.Add(key);
                     sendText($"ADD: {key} -> {value}");
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    sendText("ADD 실패: 해쉬 충돌");
                 }
                 catch
                 {
