@@ -52,9 +52,9 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
             nextindex = GetSecondaryHash(key);
         }
         
-        while (hash[index] != null && hash[index].IsOccupied)
+        while (hash[index] != null)
         {
-            if (key.CompareTo(hash[index].Key) == 0)
+            if (hash[index].IsOccupied && key.CompareTo(hash[index].Key) == 0)
             {
                 throw new ArgumentException("키 충돌");
             }
@@ -62,7 +62,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue> w
             {
                 firstdeletedindex = index;
             }
-            
+            if (!hash[index].IsOccupied && !hash[index].IsDeleted) break;
             index = (index +nextindex) % hash.Length;
         }
         int deleteCheckindex = (firstdeletedindex != -1) ? firstdeletedindex : index;
